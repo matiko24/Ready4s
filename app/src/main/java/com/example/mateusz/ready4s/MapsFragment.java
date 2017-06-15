@@ -2,6 +2,7 @@ package com.example.mateusz.ready4s;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -39,7 +40,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MapsActivity extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class MapsFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private GoogleMap mMap;
     SupportMapFragment mapFragment;
@@ -49,15 +50,15 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, Google
     Marker mCurrLocationMarker;
 
 
-    public static MapsActivity newInstance() {
-        MapsActivity mapsActivity = new MapsActivity();
-        return mapsActivity;
+    public static MapsFragment newInstance() {
+        MapsFragment mapsFragment = new MapsFragment();
+        return mapsFragment;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_maps, container, false);
+        View view = inflater.inflate(R.layout.fragment_maps, container, false);
         return view;
     }
 
@@ -97,6 +98,17 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, Google
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
         }
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Intent intent = new Intent(getContext(), DetailsActivity.class);
+                intent.putExtra("avatar", marker.getTitle());
+                intent.putExtra("lat", marker.getPosition().latitude);
+                intent.putExtra("lng", marker.getPosition().longitude);
+                startActivity(intent);
+                return false;
+            }
+        });
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -117,7 +129,7 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, Google
         if (ContextCompat.checkSelfPermission(getContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, MapsActivity.this);
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, MapsFragment.this);
         }
     }
 
@@ -147,7 +159,7 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, Google
                 if (response.isSuccessful()) {
                     for (Place place : response.body()) {
                         LatLng placeLocation = new LatLng(place.getLat(), place.getLng());
-                        Marker marker = mMap.addMarker(new MarkerOptions().position(placeLocation).title(place.getName()));
+                        Marker marker = mMap.addMarker(new MarkerOptions().position(placeLocation).title(place.getAvatar()));
                         builder.include(marker.getPosition());
                     }
                     LatLngBounds bounds = builder.build();

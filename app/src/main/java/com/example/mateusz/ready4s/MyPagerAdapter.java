@@ -8,8 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 /**
  * Created by Mateusz on 2017-06-13.
  */
@@ -35,7 +33,7 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return MapsActivity.newInstance();
+                return MapsFragment.newInstance();
             case 1:
                 return HistoryFragment.newInstance();
             default:
