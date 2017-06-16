@@ -1,12 +1,17 @@
 package com.example.mateusz.ready4s;
 
+import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ListView;
+
+import com.example.mateusz.ready4s.data.database.DBHelper;
 
 
 /**
@@ -15,7 +20,7 @@ import android.widget.TextView;
  * {@link HistoryFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  */
-public class HistoryFragment extends Fragment {
+public class HistoryFragment extends ListFragment {
 
     private OnFragmentInteractionListener mListener;
 
@@ -34,10 +39,20 @@ public class HistoryFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_history, container, false);
 
-        TextView tv = (TextView) view.findViewById(R.id.textView);
-        tv.setText("ZMIENIONY");
+        DBHelper db = new DBHelper(getContext());
+        Cursor cursor = db.getAllPlaces();
+        PlacesListAdapter adapter = new PlacesListAdapter(getContext(), cursor, 0);
+        setListAdapter(adapter);
+
 
         return view;
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        Intent intent = new Intent(getContext(), DetailsActivity.class);
+        intent.putExtra("id", (int) v.getTag());
+        startActivity(intent);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

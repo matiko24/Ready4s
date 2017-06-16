@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.mateusz.ready4s.data.database.DBHelper;
 import com.example.mateusz.ready4s.data.model.Place;
 import com.example.mateusz.ready4s.data.remote.ApiUtils;
 import com.example.mateusz.ready4s.data.remote.SOService;
@@ -29,6 +30,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -101,11 +103,16 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+                Place p = (Place) marker.getTag();
+                DBHelper db = new DBHelper(getContext());
+                int id = Integer.valueOf(p.getId());
+
+                db.insertPlace(id, p.getAvatar(), p.getLat(), p.getLng(), p.getName());
+
                 Intent intent = new Intent(getContext(), DetailsActivity.class);
-                intent.putExtra("avatar", marker.getTitle());
-                intent.putExtra("lat", marker.getPosition().latitude);
-                intent.putExtra("lng", marker.getPosition().longitude);
+                intent.putExtra("id", id);
                 startActivity(intent);
+                marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
                 return false;
             }
         });
@@ -159,7 +166,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                 if (response.isSuccessful()) {
                     for (Place place : response.body()) {
                         LatLng placeLocation = new LatLng(place.getLat(), place.getLng());
-                        Marker marker = mMap.addMarker(new MarkerOptions().position(placeLocation).title(place.getAvatar()));
+                        Marker marker = mMap.addMarker(new MarkerOptions().position(placeLocation));
+                        Place p = new Place(place.getId(), place.getAvatar(), place.getLng(), place.getLat(), place.getName());
+                        marker.setTag(p);
                         builder.include(marker.getPosition());
                     }
                     LatLngBounds bounds = builder.build();

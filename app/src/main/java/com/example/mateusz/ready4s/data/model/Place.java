@@ -10,6 +10,14 @@ import com.google.gson.annotations.SerializedName;
 public class Place {
 
 
+    public Place(String id, String avatar, Double lat, Double lng, String name) {
+        this.lng = lng;
+        this.name = name;
+        this.id = id;
+        this.lat = lat;
+        this.avatar = avatar;
+    }
+
     @SerializedName("lng")
     @Expose
     private Double lng;
