@@ -1,4 +1,4 @@
-package com.example.mateusz.ready4s;
+package com.example.mateusz.ready4s.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -8,12 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.mateusz.ready4s.R;
+import com.example.mateusz.ready4s.data.model.MyLatLng;
+
 /**
  * Created by Mateusz on 2017-06-15.
  */
 
-public class PlacesListAdapter extends CursorAdapter {
-    public PlacesListAdapter(Context context, Cursor c, int flags) {
+public class PlacesAdapter extends CursorAdapter {
+    public PlacesAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
     }
 
@@ -28,7 +31,6 @@ public class PlacesListAdapter extends CursorAdapter {
         TextView coordinates = (TextView) view.findViewById(R.id.place_coordinates);
 
         placeData.setText(cursor.getString(4));
-
         coordinates.setText(MyLatLng.getLatLngAsStringWithNSWE(cursor.getDouble(2), cursor.getDouble(3)));
         view.setTag(cursor.getInt(0));
     }

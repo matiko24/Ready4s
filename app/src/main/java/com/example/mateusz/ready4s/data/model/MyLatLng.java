@@ -1,4 +1,4 @@
-package com.example.mateusz.ready4s;
+package com.example.mateusz.ready4s.data.model;
 
 /**
  * Created by Mateusz on 2017-06-16.

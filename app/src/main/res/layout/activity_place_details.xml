@@ -5,7 +5,7 @@
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/details_fragment"
-        class="com.example.mateusz.ready4s.DetailsFragment"
+        class="com.example.mateusz.ready4s.fragment.PlaceDetailFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

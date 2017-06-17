@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Ready4s</string>
-    <string name="title_activity_maps">Map</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="place_name">Nazwa miejsca:</string>
+    <string name="longtitude">Długość geograficzna:</string>
+    <string name="latitude">Szerokość geograficzna:</string>
+    <string name="place_image">Obrazek miejsca</string>
 </resources>
